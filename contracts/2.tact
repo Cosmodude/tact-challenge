@@ -27,20 +27,22 @@ contract Task2 with Deployable {
   
   receive(msg: Refund) {
     let ctx: Context = context();
-    require(ctx.sender == self.admin, "Wrong sender");
+    require(sender() == self.admin, "Error: Wrong sender");
     
     send(SendParameters{
             to: msg.sender,
             value: ctx.value,
-            mode: SendPayGasSeparately,
+            mode: SendRemainingValue,
             body: msg.toCell()
         });
   }
 
   receive(msg: Slice) {
     let ctx: Context = context();
+    let queryId: Int = msg.loadUint(64);
     let body: Cell = 
       beginCell()
+      .storeUint(queryId,64)
       .storeAddress(ctx.sender)
       .storeRef(msg.asCell())
       .endCell();
@@ -48,7 +50,7 @@ contract Task2 with Deployable {
     send(SendParameters{
             to: self.admin,
             value: ctx.value,
-            mode: SendPayGasSeparately,
+            mode: SendRemainingValue,
             body: body
         });
   }
