@@ -32,7 +32,7 @@ contract Task2 with Deployable {
     send(SendParameters{
             to: msg.sender,
             value: ctx.value,
-            mode: SendRemainingValue,
+            mode: SendPayGasSeparately,
             body: msg.toCell()
         });
   }
@@ -48,7 +48,7 @@ contract Task2 with Deployable {
     send(SendParameters{
             to: self.admin,
             value: ctx.value,
-            mode: SendRemainingValue,
+            mode: SendPayGasSeparately,
             body: body
         });
   }
