@@ -113,9 +113,10 @@ contract Task3 with Deployable {
         });
         self.bAmount = self.bAmount - bTokenAmount;
         self.aAmount = self.aAmount + msg.amount;
+        return;
     }
 
-    else{ // B -> A
+    if(ctx.sender == self.jettonAddressB){ // B -> A
     if(msg.from == self.owner){
         self.bAmount = self.bAmount + msg.amount;
         return;
@@ -160,8 +161,10 @@ contract Task3 with Deployable {
 
         self.aAmount = self.aAmount - aTokenAmount;
         self.bAmount = self.bAmount + msg.amount;
+        return;
     }
 
+    nativeThrow(100);
   }
 
   get fun price(jetton: Address): Int { 
