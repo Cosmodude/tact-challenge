@@ -68,11 +68,12 @@ contract Task3 with Deployable {
 
   receive(msg: TokenNotification) {
     let ctx: Context = context();
-    if(msg.from == self.owner){
-      //return 0;
-    }
 
     if(ctx.sender == self.jettonAddressA){  // A -> B
+      if(msg.from == self.owner){
+        self.aAmount = self.aAmount + msg.amount;
+        return;
+      }
       let bTokenAmount: Int  = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
 
       if(bTokenAmount < self.bAmount){
@@ -110,9 +111,15 @@ contract Task3 with Deployable {
             mode: SendPayGasSeparately + SendIgnoreErrors,
             body: body.toCell()
         });
+        self.bAmount = self.bAmount - bTokenAmount;
+        self.aAmount = self.aAmount + msg.amount;
     }
 
     else{ // B -> A
+    if(msg.from == self.owner){
+        self.bAmount = self.bAmount + msg.amount;
+        return;
+      }
       let aTokenAmount: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
 
       if(aTokenAmount < self.aAmount){
@@ -150,7 +157,11 @@ contract Task3 with Deployable {
             mode: SendPayGasSeparately + SendIgnoreErrors,
             body: body.toCell()
         });
+
+        self.aAmount = self.aAmount - aTokenAmount;
+        self.bAmount = self.bAmount + msg.amount;
     }
+
   }
 
   get fun price(jetton: Address): Int { 
