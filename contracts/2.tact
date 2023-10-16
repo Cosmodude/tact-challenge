@@ -33,7 +33,9 @@ contract Task2 with Deployable {
             to: msg.sender,
             value: ctx.value,
             mode: SendRemainingValue,
-            body: null
+            body: beginCell()
+                .storeUint(msg.queryId ,64)
+                .endCell()
         });
   }
 
