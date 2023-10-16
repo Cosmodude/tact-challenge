@@ -26,8 +26,30 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
+    let ctx: Context = context();
+    require(ctx.sender == self.admin, "Wrong sender");
+    
+    send(SendParameters{
+            to: msg.sender,
+            value: ctx.value,
+            mode: SendPayGasSeparately + SendIgnoreErrors,
+            body: null
+        });
   }
 
   receive(msg: Slice) {
+    let ctx: Context = context();
+    let body: Cell = 
+      beginCell()
+      .storeAddress(ctx.sender)
+      .storeRef(msg.asCell())
+      .endCell();
+
+    send(SendParameters{
+            to: self.admin,
+            value: ctx.value,
+            mode: SendPayGasSeparately + SendIgnoreErrors,
+            body: body
+        });
   }
 }
