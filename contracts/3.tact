@@ -67,11 +67,103 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-  } 
-  
+    let ctx: Context = context();
+    if(msg.from == self.owner){
+      //return 0;
+    }
+
+    if(ctx.sender == self.jettonAddressA){  // A -> B
+      let bTokenAmount: Int  = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
+
+      if(bTokenAmount < self.bAmount){
+        let body: TokenTransfer = TokenTransfer{
+            queryId: msg.queryId,
+            amount: msg.amount,
+            destination: msg.from,
+            responseDestination: myAddress(),
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: "Tokens returned".asSlice()
+        };
+
+        send(SendParameters{
+            to: ctx.sender,
+            value: 0,
+            mode: SendPayGasSeparately + SendIgnoreErrors,
+            body: body.toCell()
+        });
+      }
+
+      let body: TokenTransfer = TokenTransfer{
+            queryId: msg.queryId,
+            amount: bTokenAmount,
+            destination: msg.from,
+            responseDestination: myAddress(),
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: "Tokens exchanged".asSlice()
+        };
+
+        send(SendParameters{
+            to: self.jettonAddressB,
+            value: 0,
+            mode: SendPayGasSeparately + SendIgnoreErrors,
+            body: body.toCell()
+        });
+    }
+
+    else{ // B -> A
+      let aTokenAmount: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
+
+      if(aTokenAmount < self.aAmount){
+        let body: TokenTransfer = TokenTransfer{
+            queryId: msg.queryId,
+            amount: msg.amount,
+            destination: msg.from,
+            responseDestination: myAddress(),
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: "Tokens returned".asSlice()
+        };
+
+        send(SendParameters{
+            to: ctx.sender,
+            value: 0,
+            mode: SendPayGasSeparately + SendIgnoreErrors,
+            body: body.toCell()
+        });
+      }
+
+      let body: TokenTransfer = TokenTransfer{
+            queryId: msg.queryId,
+            amount: aTokenAmount,
+            destination: msg.from,
+            responseDestination: myAddress(),
+            customPayload: null,
+            forwardTonAmount: 0,
+            forwardPayload: "Tokens exchanged".asSlice()
+        };
+
+        send(SendParameters{
+            to: self.jettonAddressA,
+            value: 0,
+            mode: SendPayGasSeparately + SendIgnoreErrors,
+            body: body.toCell()
+        });
+    }
+  }
+
   get fun price(jetton: Address): Int { 
+    if(jetton == self.jettonAddressA){
+      return (self.aAmount * self.decimal / self.bAmount);
+    }
+    return (self.bAmount * self.decimal / self.aAmount);
   }
   
   get fun balance(jetton: Address): Int { 
+    if(jetton == self.jettonAddressA){
+      return self.aAmount;
+    }
+    return self.bAmount;
   }
 }
