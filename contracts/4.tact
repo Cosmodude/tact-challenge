@@ -104,17 +104,17 @@ contract Task4 with Deployable {
         forwardPayload: emptySlice()
     };
 
+    self.nftAddress = newAddress(0,0);
+    self.ownerAddress = newAddress(0,0);
+    self.lockEnd = 0;
+    self.nftStored = false;
+
     send(SendParameters{
               to: self.nftAddress,
               value: myBalance() - context().value,
               mode: SendRemainingValue + SendIgnoreErrors, 
               body: body.toCell()
      });
-
-    self.nftAddress = newAddress(0,0);
-    self.ownerAddress = newAddress(0,0);
-    self.lockEnd = 0;
-    self.nftStored = false;
 
   }
 
