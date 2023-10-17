@@ -67,16 +67,15 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-    let ctx: Context = context();
 
-    if(ctx.sender == self.jettonAddressA){  // A -> B
+    if(sender() == self.jettonAddressA){  // A -> B
       if(msg.from == self.owner){
         self.aAmount = self.aAmount + msg.amount;
         return;
       }
       let bTokenAmount: Int  = (((self.bAmount * self.decimal) / self.aAmount) * msg.amount) / self.decimal;
 
-      if(bTokenAmount < self.bAmount){
+      if(bTokenAmount > self.bAmount){
         let body: TokenTransfer = TokenTransfer{
             queryId: msg.queryId,
             amount: msg.amount,
@@ -88,7 +87,7 @@ contract Task3 with Deployable {
         };
 
         send(SendParameters{
-            to: ctx.sender,
+            to: sender(),
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
@@ -104,27 +103,28 @@ contract Task3 with Deployable {
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: emptySlice()
-        };
+      };
 
-        send(SendParameters{
-            to: self.jettonAddressB,
-            value: 0,
-            mode: SendRemainingValue + SendIgnoreErrors,
-            body: body.toCell()
-        });
-        self.bAmount = self.bAmount - bTokenAmount;
-        self.aAmount = self.aAmount + msg.amount;
-        return;
+      send(SendParameters{
+          to: self.jettonAddressB,
+          value: 0,
+          mode: SendRemainingValue + SendIgnoreErrors,
+          body: body.toCell()
+      });
+      self.bAmount = self.bAmount - bTokenAmount;
+      self.aAmount = self.aAmount + msg.amount;
+      return;
     }
 
-    if(ctx.sender == self.jettonAddressB){ // B -> A
-    if(msg.from == self.owner){
-        self.bAmount = self.bAmount + msg.amount;
-        return;
-      }
+    if(sender() == self.jettonAddressB){ // B -> A
+      if(msg.from == self.owner){
+          self.bAmount = self.bAmount + msg.amount;
+          return;
+        }
+
       let aTokenAmount: Int = (((self.aAmount * self.decimal) / self.bAmount) * msg.amount) / self.decimal;
 
-      if(aTokenAmount < self.aAmount){
+      if(aTokenAmount > self.aAmount){
         let body: TokenTransfer = TokenTransfer{
             queryId: msg.queryId,
             amount: msg.amount,
@@ -136,7 +136,7 @@ contract Task3 with Deployable {
         };
 
         send(SendParameters{
-            to: ctx.sender,
+            to: sender(),
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
@@ -154,16 +154,16 @@ contract Task3 with Deployable {
             forwardPayload: emptySlice()
         };
 
-        send(SendParameters{
-            to: self.jettonAddressA,
-            value: 0,
-            mode: SendRemainingValue + SendIgnoreErrors,
-            body: body.toCell()
-        });
+      send(SendParameters{
+          to: self.jettonAddressA,
+          value: 0,
+          mode: SendRemainingValue + SendIgnoreErrors,
+          body: body.toCell()
+      });
 
-        self.aAmount = self.aAmount - aTokenAmount;
-        self.bAmount = self.bAmount + msg.amount;
-        return;
+      self.aAmount = self.aAmount - aTokenAmount;
+      self.bAmount = self.bAmount + msg.amount;
+      return;
     }
 
     throw(100);
