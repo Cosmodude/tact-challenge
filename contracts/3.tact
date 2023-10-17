@@ -74,7 +74,7 @@ contract Task3 with Deployable {
         self.aAmount = self.aAmount + msg.amount;
         return;
       }
-      let bTokenAmount: Int  = (self.bAmount * self.decimal / self.aAmount) * msg.amount / self.decimal;
+      let bTokenAmount: Int  = (((self.bAmount * self.decimal) / self.aAmount) * msg.amount) / self.decimal;
 
       if(bTokenAmount < self.bAmount){
         let body: TokenTransfer = TokenTransfer{
@@ -121,7 +121,7 @@ contract Task3 with Deployable {
         self.bAmount = self.bAmount + msg.amount;
         return;
       }
-      let aTokenAmount: Int = (self.aAmount * self.decimal / self.bAmount) * msg.amount / self.decimal;
+      let aTokenAmount: Int = (((self.aAmount * self.decimal) / self.bAmount) * msg.amount) / self.decimal;
 
       if(aTokenAmount < self.aAmount){
         let body: TokenTransfer = TokenTransfer{
@@ -169,9 +169,9 @@ contract Task3 with Deployable {
 
   get fun price(jetton: Address): Int { 
     if(jetton == self.jettonAddressA){
-      return (self.aAmount * self.decimal / self.bAmount);
+      return ((self.aAmount * self.decimal) / self.bAmount);
     }
-    return (self.bAmount * self.decimal / self.aAmount);
+    return ((self.bAmount * self.decimal) / self.aAmount);
   }
   
   get fun balance(jetton: Address): Int { 
