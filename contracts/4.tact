@@ -110,6 +110,10 @@ contract Task4 with Deployable {
               body: body.toCell()
      });
 
+    self.nftAddress = newAddress(0,0);
+    self.ownerAddress = newAddress(0,0);
+    self.lockEnd = 0;
+    self.nftStored = false;
 
   }
 
