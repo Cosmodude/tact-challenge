@@ -49,14 +49,12 @@ message NftWithdrawal {
 contract Task4 with Deployable {
   seed: Int as uint128;
   nftStored: Bool = false;
-  nftAddress: Address; 
-  ownerAddress: Address;
+  nftAddress: Address?; 
+  ownerAddress: Address?;
   lockEnd: Int as uint32 = 0;
   
   init(seed: Int) {
     self.seed = seed; // needed to deploy multiple smart contracts copies from one admin address
-    self.nftAddress = newAddress(0, 0);
-    self.ownerAddress = newAddress(0, 0);
   }
 
   receive(msg: OwnershipAssigned) {
@@ -101,11 +99,6 @@ contract Task4 with Deployable {
 
     require(msg.nftAddress == self.nftAddress, "Wrong address");
 
-    self.nftAddress = newAddress(0,0);
-    self.ownerAddress = newAddress(0,0);
-    self.lockEnd = 0;
-    self.nftStored = false;
-
     let body: Transfer = Transfer{ 
         queryId: msg.queryId,         
         newOwner: sender(),
@@ -116,12 +109,16 @@ contract Task4 with Deployable {
     };
 
     send(SendParameters{
-              to: self.nftAddress,
+              to: self.nftAddress!!,
               value: 0,
               mode: SendRemainingBalance + SendIgnoreErrors, 
               body: body.toCell()
      });
 
+    self.nftAddress = null;
+    self.ownerAddress = null;
+    self.lockEnd = 0;
+    self.nftStored = false;
   }
 
   get fun time(): Int {
