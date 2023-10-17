@@ -93,7 +93,7 @@ contract Task4 with Deployable {
       return;
     }
 
-    //require(msg.nftAddress == self.nftAddress, "Wrong address");
+    require(msg.nftAddress == self.nftAddress, "Wrong address");
 
     let body: Transfer = Transfer{ 
         queryId: msg.queryId,         
