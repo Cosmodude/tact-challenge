@@ -48,7 +48,7 @@ message NftWithdrawal {
 
 contract Task4 with Deployable {
   seed: Int as uint128;
-  nftStored: Bool = false;
+  //nftStored: Bool = false;
   nftAddress: Address?; 
   ownerAddress: Address?;
   lockEnd: Int as uint32 = 0;
@@ -58,7 +58,7 @@ contract Task4 with Deployable {
   }
 
   receive(msg: OwnershipAssigned) {
-    if(self.nftStored){
+    if(self.nftAddress == null){
       let body: Transfer = Transfer{ 
         queryId: msg.queryId,         
         newOwner: msg.prevOwner,
@@ -80,7 +80,7 @@ contract Task4 with Deployable {
     self.nftAddress = sender();
     self.ownerAddress = msg.prevOwner;
     self.lockEnd = msg.forwardPayload.loadUint(32) + now();
-    self.nftStored = true;
+    //self.nftStored = true;
   }
 
   receive(msg: NftWithdrawal) {
@@ -117,8 +117,7 @@ contract Task4 with Deployable {
 
     self.nftAddress = null;
     self.ownerAddress = null;
-    self.lockEnd = 0;
-    self.nftStored = false;
+    //self.nftStored = false;
   }
 
   get fun time(): Int {
