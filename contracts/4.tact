@@ -73,7 +73,7 @@ contract Task4 with Deployable {
       send(SendParameters{
             to: sender(),
             value: 0,
-            mode: SendRemainingValue + SendIgnoreErrors,
+            mode: SendPayGasSeparately + SendIgnoreErrors,
             body: body.toCell()
       });
       return;
@@ -81,7 +81,7 @@ contract Task4 with Deployable {
 
     self.nftAddress = sender();
     self.ownerAddress = msg.prevOwner;
-    self.lockEnd = msg.forwardPayload.loadUint(32);
+    self.lockEnd = msg.forwardPayload.loadUint(32) + now();
     self.nftStored = true;
   }
 
