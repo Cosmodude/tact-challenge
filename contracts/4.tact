@@ -73,7 +73,7 @@ contract Task4 with Deployable {
       send(SendParameters{
             to: sender(),
             value: 0,
-            mode: SendPayGasSeparately + SendIgnoreErrors,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
       });
       return;
@@ -107,7 +107,7 @@ contract Task4 with Deployable {
     send(SendParameters{
               to: self.nftAddress,
               value: 0,
-              mode: SendRemainingValue + SendIgnoreErrors, 
+              mode: SendRemainingBalance + SendIgnoreErrors, 
               body: body.toCell()
      });
 
