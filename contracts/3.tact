@@ -84,7 +84,7 @@ contract Task3 with Deployable {
             responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
-            forwardPayload: "Tokens returned".asSlice()
+            forwardPayload: emptySlice()
         };
 
         send(SendParameters{
@@ -102,7 +102,7 @@ contract Task3 with Deployable {
             responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
-            forwardPayload: "Tokens exchanged".asSlice()
+            forwardPayload: emptySlice()
         };
 
         send(SendParameters{
@@ -131,7 +131,7 @@ contract Task3 with Deployable {
             responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
-            forwardPayload: "Tokens returned".asSlice()
+            forwardPayload: emptySlice()
         };
 
         send(SendParameters{
@@ -149,7 +149,7 @@ contract Task3 with Deployable {
             responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
-            forwardPayload: "Tokens exchanged".asSlice()
+            forwardPayload: emptySlice()
         };
 
         send(SendParameters{
