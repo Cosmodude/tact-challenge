@@ -99,15 +99,15 @@ contract Task4 with Deployable {
         queryId: msg.queryId,         
         newOwner: sender(),
         responseDestination: sender(),
-        customPayload: null,
-        forwardAmount: 0,
+        customPayload: null,  
+        forwardAmount: myBalance() - context().value,
         forwardPayload: emptySlice()
     };
 
     send(SendParameters{
               to: self.nftAddress,
               value: 0,
-              mode: SendRemainingBalance + SendIgnoreErrors,
+              mode: SendRemainingValue + SendIgnoreErrors, 
               body: body.toCell()
      });
 
