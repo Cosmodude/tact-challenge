@@ -118,9 +118,9 @@ contract Task3 with Deployable {
 
     if(sender() == self.jettonAddressB){ // B -> A
       if(msg.from == self.owner){
-          self.bAmount = self.bAmount + msg.amount;
-          return;
-        }
+        self.bAmount = self.bAmount + msg.amount;
+        return;
+      }
 
       let aTokenAmount: Int = (((self.aAmount * self.decimal) / self.bAmount) * msg.amount) / self.decimal;
 
@@ -138,7 +138,7 @@ contract Task3 with Deployable {
         send(SendParameters{
             to: sender(),
             value: 0,
-            mode: SendRemainingValue + SendIgnoreErrors,
+            mode: SendPayGasSeparately + SendIgnoreErrors,
             body: body.toCell()
         });
         return;
@@ -157,7 +157,7 @@ contract Task3 with Deployable {
       send(SendParameters{
           to: self.jettonAddressA,
           value: 0,
-          mode: SendRemainingValue + SendIgnoreErrors,
+          mode: SendPayGasSeparately + SendIgnoreErrors,
           body: body.toCell()
       });
 
@@ -173,13 +173,17 @@ contract Task3 with Deployable {
     if(jetton == self.jettonAddressA){
       return ((self.aAmount * self.decimal) / self.bAmount);
     }
-    return ((self.bAmount * self.decimal) / self.aAmount);
+    if(jetton == self.jettonAddressB){
+      return ((self.bAmount * self.decimal) / self.aAmount);
+    }
   }
   
   get fun balance(jetton: Address): Int { 
     if(jetton == self.jettonAddressA){
       return self.aAmount;
     }
-    return self.bAmount;
+    if(jetton == self.jettonAddressB){
+      return self.bAmount;
+    }
   }
 }
