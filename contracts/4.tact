@@ -95,8 +95,8 @@ contract Task4 with Deployable {
               value: 0,
               mode: SendRemainingValue + SendIgnoreErrors, 
               body: "NFT is still locked".asComment()
-     });
-      return;
+      });
+    return;
     }
 
     require(msg.nftAddress == self.nftAddress, "Wrong address");
@@ -125,7 +125,10 @@ contract Task4 with Deployable {
   }
 
   get fun time(): Int {
-    return self.lockEnd;
+    if(self.lockEnd == 0){
+      return 0;
+    }
+    return self.lockEnd - now();
   }
 
   get fun nft(): Address? {
