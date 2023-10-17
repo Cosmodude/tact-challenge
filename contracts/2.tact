@@ -41,7 +41,7 @@ contract Task2 with Deployable {
     let ctx: Context = context();
     let body: Cell = 
       beginCell()
-      .storeAddress(sender())
+      .storeAddress(ctx.sender)
       .storeRef(msg.asCell())
       .endCell();
 
