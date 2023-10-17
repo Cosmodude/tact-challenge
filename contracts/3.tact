@@ -93,6 +93,7 @@ contract Task3 with Deployable {
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
         });
+        return;
       }
 
       let body: TokenTransfer = TokenTransfer{
@@ -140,6 +141,7 @@ contract Task3 with Deployable {
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
         });
+        return;
       }
 
       let body: TokenTransfer = TokenTransfer{
