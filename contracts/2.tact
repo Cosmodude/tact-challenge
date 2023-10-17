@@ -26,7 +26,6 @@ contract Task2 with Deployable {
   }
   
   receive(msg: Refund) {
-    let ctx: Context = context();
     require(sender() == self.admin, "Error: Wrong sender");
     
     send(SendParameters{
@@ -38,10 +37,9 @@ contract Task2 with Deployable {
   }
 
   receive(msg: Slice) {
-    let ctx: Context = context();
     let body: Cell = 
       beginCell()
-      .storeAddress(ctx.sender)
+      .storeAddress(sender())
       .storeRef(msg.asCell())
       .endCell();
 
