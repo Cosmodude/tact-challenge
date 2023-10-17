@@ -32,7 +32,7 @@ contract Task2 with Deployable {
     send(SendParameters{
             to: msg.sender,
             value: ctx.value,
-            mode: SendRemainingValue,
+            mode: SendRemainingValue + SendPayGasSeparately,
             body: msg.toCell()
         });
   }
@@ -41,14 +41,14 @@ contract Task2 with Deployable {
     let ctx: Context = context();
     let body: Cell = 
       beginCell()
-      .storeAddress(ctx.sender)
+      .storeAddress(sender())
       .storeRef(msg.asCell())
       .endCell();
 
     send(SendParameters{
             to: self.admin,
             value: ctx.value,
-            mode: SendRemainingValue,
+            mode: SendRemainingValue + SendPayGasSeparately,
             body: body
         });
   }
