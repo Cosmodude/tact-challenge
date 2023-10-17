@@ -164,7 +164,7 @@ contract Task3 with Deployable {
         return;
     }
 
-    nativeThrow(100);
+    throw(100);
   }
 
   get fun price(jetton: Address): Int { 
