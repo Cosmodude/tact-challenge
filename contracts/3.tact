@@ -90,7 +90,7 @@ contract Task3 with Deployable {
         send(SendParameters{
             to: ctx.sender,
             value: 0,
-            mode: SendPayGasSeparately + SendIgnoreErrors,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
         });
       }
