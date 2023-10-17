@@ -27,7 +27,7 @@ contract Task2 with Deployable {
   
   receive(msg: Refund) {
     let ctx: Context = context();
-    //require(sender() == self.admin, "Error: Wrong sender");
+    require(sender() == self.admin, "Error: Wrong sender");
     
     send(SendParameters{
             to: msg.sender,
