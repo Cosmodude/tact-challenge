@@ -81,7 +81,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: msg.amount,
             destination: msg.from,
-            responseDestination: myAddress(),
+            responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: "Tokens returned".asSlice()
@@ -99,7 +99,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: bTokenAmount,
             destination: msg.from,
-            responseDestination: myAddress(),
+            responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: "Tokens exchanged".asSlice()
@@ -108,7 +108,7 @@ contract Task3 with Deployable {
         send(SendParameters{
             to: self.jettonAddressB,
             value: 0,
-            mode: SendPayGasSeparately + SendIgnoreErrors,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
         });
         self.bAmount = self.bAmount - bTokenAmount;
@@ -128,7 +128,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: msg.amount,
             destination: msg.from,
-            responseDestination: myAddress(),
+            responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: "Tokens returned".asSlice()
@@ -137,7 +137,7 @@ contract Task3 with Deployable {
         send(SendParameters{
             to: ctx.sender,
             value: 0,
-            mode: SendPayGasSeparately + SendIgnoreErrors,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
         });
       }
@@ -146,7 +146,7 @@ contract Task3 with Deployable {
             queryId: msg.queryId,
             amount: aTokenAmount,
             destination: msg.from,
-            responseDestination: myAddress(),
+            responseDestination: msg.from,
             customPayload: null,
             forwardTonAmount: 0,
             forwardPayload: "Tokens exchanged".asSlice()
@@ -155,7 +155,7 @@ contract Task3 with Deployable {
         send(SendParameters{
             to: self.jettonAddressA,
             value: 0,
-            mode: SendPayGasSeparately + SendIgnoreErrors,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
         });
 
