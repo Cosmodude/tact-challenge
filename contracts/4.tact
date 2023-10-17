@@ -76,6 +76,7 @@ contract Task4 with Deployable {
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
       });
+      return;
     }
 
     self.nftAddress = sender();
@@ -106,13 +107,13 @@ contract Task4 with Deployable {
     send(SendParameters{
               to: self.nftAddress,
               value: 0,
-              mode: SendRemainingValue + SendIgnoreErrors,
+              mode: SendRemainingBalance + SendIgnoreErrors,
               body: body.toCell()
      });
 
     self.nftAddress = newAddress(0,0);
     self.ownerAddress = newAddress(0,0);
-    self.lockEnd = 0;
+    //self.lockEnd = 0;
     self.nftStored = false;
 
   }
