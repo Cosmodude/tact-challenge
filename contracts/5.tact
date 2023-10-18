@@ -134,7 +134,7 @@ contract Task5 with Deployable {
           to: sentNft,
           //value: context().value - self.profi,
           value: context().value - ton("2"),
-          mode: SendIgnoreErrors,
+          mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
 
@@ -175,7 +175,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: sentNft,
         value: 0,
-        mode: SendIgnoreErrors,
+        mode: SendIgnoreErrors + SendPayGasSeparately,
         body: body.toCell()
       });
       i = i + 1;
