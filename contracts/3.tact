@@ -68,7 +68,7 @@ contract Task3 with Deployable {
 
   receive(msg: TokenNotification) {
     require(context().sender == self.jettonAddressA || context().sender == self.jettonAddressA, "Wrong Jetton");
-    
+
     if(context().sender == self.jettonAddressA){  // A -> B
       if(msg.from == self.owner){
         self.aAmount = self.aAmount + msg.amount;
@@ -79,12 +79,12 @@ contract Task3 with Deployable {
 
       if(bTokenAmount > self.bAmount){
         let body: TokenTransfer = TokenTransfer{
-            queryId: msg.queryId,
+            queryId: 0,
             amount: msg.amount,
             destination: msg.from,
-            responseDestination: msg.from,
+            responseDestination: myAddress(),
             customPayload: null,
-            forwardTonAmount: 0,
+            forwardTonAmount: ton("0.1"),
             forwardPayload: emptySlice()
         };
 
@@ -98,12 +98,12 @@ contract Task3 with Deployable {
       }
 
       let body: TokenTransfer = TokenTransfer{
-            queryId: msg.queryId,
+            queryId: 0,
             amount: bTokenAmount,
             destination: msg.from,
-            responseDestination: msg.from,
+            responseDestination: myAddress(),
             customPayload: null,
-            forwardTonAmount: 0,
+            forwardTonAmount: ton("0.1"),
             forwardPayload: emptySlice()
       };
 
@@ -129,12 +129,12 @@ contract Task3 with Deployable {
 
       if(aTokenAmount > self.aAmount){
         let body: TokenTransfer = TokenTransfer{
-            queryId: msg.queryId,
+            queryId: 0,
             amount: msg.amount,
             destination: msg.from,
-            responseDestination: msg.from,
+            responseDestination: myAddress(),
             customPayload: null,
-            forwardTonAmount: 0,
+            forwardTonAmount: ton("0.1"),
             forwardPayload: emptySlice()
         };
 
@@ -148,12 +148,12 @@ contract Task3 with Deployable {
       }
 
       let body: TokenTransfer = TokenTransfer{
-            queryId: msg.queryId,
+            queryId: 0,
             amount: aTokenAmount,
             destination: msg.from,
-            responseDestination: msg.from,
+            responseDestination: myAddress(),
             customPayload: null,
-            forwardTonAmount: 0,
+            forwardTonAmount: ton("0.1"),
             forwardPayload: emptySlice()
         };
 
