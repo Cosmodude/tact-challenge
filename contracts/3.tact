@@ -46,7 +46,7 @@ message(0xf8a7ea5) TokenTransfer {
      destination: Address; // should be user address / TokenNotification.from
      responseDestination: Address?; // should be myAddress()
      customPayload: Cell? = null; // should be null
-     forwardTonAmount: Int as coins = ton("0.1"); // should be ton("0.01")
+     forwardTonAmount: Int as coins = ton("0.01"); // should be ton("0.01")
      forwardPayload: Slice as remaining; // should be emptySlice()
 }
 
@@ -73,12 +73,11 @@ contract Task3 with Deployable {
     if(context().sender == self.jettonAddressA){  // A -> B
       if(msg.from == self.owner){
         self.aAmount = self.aAmount + msg.amount;
-        self.reply("Jettons deposited".asComment());
         return;
       }
 
       // check for price not to be Infinite
-      if(self.aAmount == 0){
+      if(self.aAmount == 0){ // return
         let body: TokenTransfer = TokenTransfer{
             amount: msg.amount,
             destination: msg.from,
@@ -87,7 +86,7 @@ contract Task3 with Deployable {
         };
 
         send(SendParameters{
-            to: sender(),
+            to: self.jettonAddressA,
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
@@ -97,7 +96,7 @@ contract Task3 with Deployable {
 
       let bTokenAmount: Int  = (((self.bAmount * self.decimal) / self.aAmount) * msg.amount) / self.decimal;
 
-      if(bTokenAmount > self.bAmount){
+      if(bTokenAmount > self.bAmount){ // return 
         let body: TokenTransfer = TokenTransfer{
             amount: msg.amount,
             destination: msg.from,
@@ -106,7 +105,7 @@ contract Task3 with Deployable {
         };
 
         send(SendParameters{
-            to: sender(),
+            to: self.jettonAddressA,
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
@@ -132,10 +131,9 @@ contract Task3 with Deployable {
       return;
     }
 
-    if(sender() == self.jettonAddressB){ // B -> A
+    if(context().sender == self.jettonAddressB){ // B -> A
       if(msg.from == self.owner){
         self.bAmount = self.bAmount + msg.amount;
-        self.reply("Jettons deposited".asComment());
         return;
       }
       // check for price not to be Infinite
@@ -148,7 +146,7 @@ contract Task3 with Deployable {
         };
 
         send(SendParameters{
-            to: sender(),
+            to: self.jettonAddressB,
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
@@ -167,7 +165,7 @@ contract Task3 with Deployable {
         };
 
         send(SendParameters{
-            to: sender(),
+            to: self.jettonAddressB,
             value: 0,
             mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
@@ -201,8 +199,11 @@ contract Task3 with Deployable {
       if(self.bAmount == 0){return 0;}
       return ((self.aAmount * self.decimal) / self.bAmount);
     }
-    if(self.aAmount == 0){return 0;}
-    return ((self.bAmount * self.decimal) / self.aAmount);
+    if(jetton == self.jettonAddressA){
+      if(self.aAmount == 0){return 0;}
+      return ((self.bAmount * self.decimal) / self.aAmount);
+    }
+    return 0;
   }
   
   get fun balance(jetton: Address): Int { 
