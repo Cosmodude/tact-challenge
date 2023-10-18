@@ -131,9 +131,9 @@ contract Task5 with Deployable {
     
     send(SendParameters{
           to: sentNft,
-          value: myBalance() - self.profit - context().value,
-          //value: context().value - ton("2"),
-          mode: SendIgnoreErrors + SendRemainingValue,
+          //value: context().value - self.profi,
+          value: context().value - ton("2"),
+          mode: SendIgnoreErrors,
           body: body.toCell()
     });
 

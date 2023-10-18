@@ -67,8 +67,9 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-
-    if(sender() == self.jettonAddressA){  // A -> B
+    require(context().sender == self.jettonAddressA || context().sender == self.jettonAddressA, "Wrong Jetton");
+    
+    if(context().sender == self.jettonAddressA){  // A -> B
       if(msg.from == self.owner){
         self.aAmount = self.aAmount + msg.amount;
         self.reply("Jettons deposited".asComment());
@@ -167,7 +168,7 @@ contract Task3 with Deployable {
       self.bAmount = self.bAmount + msg.amount;
       return;
     }
-    
+
   }
 
   get fun price(jetton: Address): Int { 
