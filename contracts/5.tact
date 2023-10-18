@@ -119,7 +119,7 @@ contract Task5 with Deployable {
     if(random == self.nftCounter){
       send(SendParameters{
             to: sender(),
-            value: myBalance() - self.profit,
+            value: context().value - ton("2"),
             mode: SendIgnoreErrors,
             body: body.toCell()
       });
@@ -139,14 +139,60 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalProfit) {
+    require(sender() == self.owner, "Insufficient privelegies");
+    let body: AdminFetchProfit = AdminFetchProfit{
+      queryId: msg.queryId
+    };
+
+    send(SendParameters{
+          to: self.owner,
+          value: self.profit - ton("0.1"),
+          mode: SendIgnoreErrors + SendRemainingValue,
+          body: body.toCell()
+    });
 
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
+    require(context().value >= (ton("1") + self.nftCounter * ton("0.08")), "Insufficent funds");
+    require(sender() == self.owner, "Invalid sender");
+
+    let i: Int = 0;
+    let body: Transfer = Transfer{
+          queryId: msg.queryId,         
+          newOwner: self.owner,
+          responseDestination: self.owner,
+          customPayload: null,
+          forwardAmount: 0,
+          forwardPayload: emptySlice()
+    };
+    while (i < self.nftCounter - 1) {           
+      let sentNft: Address = self.nfts.get(i)!!;
+
+      send(SendParameters{
+        to: sentNft,
+        value: 0,
+        mode: SendIgnoreErrors,
+        body: body.toCell()
+      });
+      i = i + 1;
+
+    }
+
+    sentNft = self.nfts.get(self.nftCounter - 1)!!;
+
+    send(SendParameters{
+        to: sentNft,
+        value: 0,
+        mode: SendIgnoreErrors + SendRemainingValue,
+        body: body.toCell()
+      });
+
+    
   }
 
   get fun profit(): Int { 
-    return self.profit;
+    return self.profit - ton("0.1");
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
