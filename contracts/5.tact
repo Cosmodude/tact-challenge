@@ -80,8 +80,6 @@ contract Task5 with Deployable {
     if(msg.prevOwner == self.owner){
       self.nfts.set(self.nftCounter, sender());
       self.nftCounter = self.nftCounter + 1;
-      self.reply("Nft recieved".asComment());
-      return;
     }
 
     // not enough Ton
@@ -98,7 +96,7 @@ contract Task5 with Deployable {
       send(SendParameters{
             to: context().sender,
             value: 0,
-            mode: SendRemainingValue,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
       });
       return;
@@ -121,9 +119,9 @@ contract Task5 with Deployable {
     if(random == self.nftCounter){
       send(SendParameters{
             to: context().sender,
-            //value: myBalance() - self.profit - context().value,
-            value: context().value - ton("2"),
-            mode: SendIgnoreErrors,
+            value: myBalance() - self.profit - context().value,
+            //value: context().value - ton("2"),
+            mode: SendIgnoreErrors + SendRemainingValue,
             body: body.toCell()
       });
       return;
@@ -150,10 +148,11 @@ contract Task5 with Deployable {
 
     send(SendParameters{
           to: self.owner,
-          value: myBalance() - ton("0.1"),
+          value: self.profit - ton("0.1"),
           mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
+
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
