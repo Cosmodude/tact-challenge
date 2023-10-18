@@ -80,6 +80,7 @@ contract Task5 with Deployable {
     if(msg.prevOwner == self.owner){
       self.nfts.set(self.nftCounter, sender());
       self.nftCounter = self.nftCounter + 1;
+      self.reply("Nft recieved".asComment());
     }
 
     // not enough Ton
@@ -148,7 +149,7 @@ contract Task5 with Deployable {
 
     send(SendParameters{
           to: self.owner,
-          value: self.profit - ton("0.1"),
+          value: myBalance() - ton("0.1"),
           mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
