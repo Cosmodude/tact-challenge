@@ -68,7 +68,7 @@ contract Task3 with Deployable {
   }
 
   receive(msg: TokenNotification) {
-    require(context().sender == self.jettonAddressA || context().sender == self.jettonAddressA, "Wrong Jetton");
+    require(context().sender == self.jettonAddressA || context().sender == self.jettonAddressB, "Wrong Jetton");
 
     if(context().sender == self.jettonAddressA){  // A -> B
       if(msg.from == self.owner){
