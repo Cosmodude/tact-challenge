@@ -148,11 +148,12 @@ contract Task5 with Deployable {
 
     send(SendParameters{
           to: self.owner,
-          value: myBalance() - ton("0.1") - context().value,
+          //value: myBalance() - ton("0.1") - context().value,
+          value: self.profit - ton("0.1"),
           mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
-
+    self.profit = ton("0.1");
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
@@ -173,7 +174,7 @@ contract Task5 with Deployable {
 
       send(SendParameters{
         to: sentNft,
-        value: 0,
+        value: ton("0.08"),
         mode: SendIgnoreErrors,
         body: body.toCell()
       });
