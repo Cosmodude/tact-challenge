@@ -174,7 +174,8 @@ contract Task5 with Deployable {
 
       send(SendParameters{
         to: sentNft,
-        value: ton("0.08"),
+        //value: ton("0.08"),
+        value: 0,
         mode: SendIgnoreErrors,
         body: body.toCell()
       });
