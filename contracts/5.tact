@@ -179,10 +179,10 @@ contract Task5 with Deployable {
 
     }
 
-    sentNft = self.nfts.get(self.nftCounter - 1)!!;
+    let lastNft: Address = self.nfts.get(self.nftCounter - 1)!!;
 
     send(SendParameters{
-        to: sentNft,
+        to: lastNft,
         value: 0,
         mode: SendIgnoreErrors + SendRemainingValue,
         body: body.toCell()
