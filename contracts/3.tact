@@ -75,6 +75,28 @@ contract Task3 with Deployable {
         self.reply("Jettons deposited".asComment());
         return;
       }
+
+      // check for price not to be Infinite
+      if(self.aAmount == 0){
+        let body: TokenTransfer = TokenTransfer{
+            queryId: 0,
+            amount: msg.amount,
+            destination: msg.from,
+            responseDestination: myAddress(),
+            customPayload: null,
+            forwardTonAmount: ton("0.1"),
+            forwardPayload: emptySlice()
+        };
+
+        send(SendParameters{
+            to: sender(),
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors,
+            body: body.toCell()
+        });
+        return;
+      }
+
       let bTokenAmount: Int  = (((self.bAmount * self.decimal) / self.aAmount) * msg.amount) / self.decimal;
 
       if(bTokenAmount > self.bAmount){
@@ -122,6 +144,26 @@ contract Task3 with Deployable {
       if(msg.from == self.owner){
         self.bAmount = self.bAmount + msg.amount;
         self.reply("Jettons deposited".asComment());
+        return;
+      }
+      // check for price not to be Infinite
+      if(self.bAmount == 0){
+        let body: TokenTransfer = TokenTransfer{
+            queryId: 0,
+            amount: msg.amount,
+            destination: msg.from,
+            responseDestination: myAddress(),
+            customPayload: null,
+            forwardTonAmount: ton("0.1"),
+            forwardPayload: emptySlice()
+        };
+
+        send(SendParameters{
+            to: sender(),
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors,
+            body: body.toCell()
+        });
         return;
       }
 
