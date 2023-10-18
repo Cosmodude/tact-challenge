@@ -48,7 +48,6 @@ message NftWithdrawal {
 
 contract Task4 with Deployable {
   seed: Int as uint128;
-  //nftStored: Bool = false;
   nftAddress: Address? = null; 
   ownerAddress: Address? = null;
   lockEnd: Int as uint32 = 0;
@@ -80,14 +79,13 @@ contract Task4 with Deployable {
     self.nftAddress = context().sender;
     self.ownerAddress = msg.prevOwner;
     self.lockEnd = msg.forwardPayload.loadUint(32) + now();
-    //self.nftStored = true;
+
   }
 
   receive(msg: NftWithdrawal) {
     require(context().sender == self.ownerAddress, "Invalid sender");
     
     if(now() < self.lockEnd){
-      //self.reply("NFT is still locked".asComment());
       send(SendParameters{
               to: context().sender,
               value: 0,
@@ -97,27 +95,27 @@ contract Task4 with Deployable {
     return;
     }
 
-    require(msg.nftAddress == self.nftAddress, "Wrong address");
+    //require(msg.nftAddress == self.nftAddress, "Wrong address");
 
     let body: Transfer = Transfer{ 
         queryId: msg.queryId,         
         newOwner: context().sender,
         responseDestination: context().sender,
         customPayload: null,  
-        forwardAmount: myBalance() - context().value,
+        forwardAmount: 0,
         forwardPayload: emptySlice()
     };
 
     send(SendParameters{
               to: self.nftAddress!!,
               value: 0,
-              mode: SendRemainingBalance + SendIgnoreErrors, 
+              mode: SendRemainingValue + SendIgnoreErrors, 
               body: body.toCell()
      });
 
     self.nftAddress = null;
     self.ownerAddress = null;
-    //self.nftStored = false;
+
   }
 
   get fun time(): Int {
