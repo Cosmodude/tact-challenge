@@ -138,7 +138,7 @@ contract Task3 with Deployable {
         send(SendParameters{
             to: sender(),
             value: 0,
-            mode: SendPayGasSeparately + SendIgnoreErrors,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
         });
         return;
@@ -157,7 +157,7 @@ contract Task3 with Deployable {
       send(SendParameters{
           to: self.jettonAddressA,
           value: 0,
-          mode: SendPayGasSeparately + SendIgnoreErrors,
+          mode: SendRemainingValue + SendIgnoreErrors,
           body: body.toCell()
       });
 
