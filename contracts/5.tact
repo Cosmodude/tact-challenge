@@ -118,9 +118,10 @@ contract Task5 with Deployable {
 
     if(random == self.nftCounter){
       send(SendParameters{
-            to: sender(),
-            value: context().value - ton("2"),
-            mode: SendIgnoreErrors,
+            to: context().sender,
+            value: myBalance() - self.profit - context().value,
+            //value: context().value - ton("2"),
+            mode: SendIgnoreErrors + SendRemainingValue,
             body: body.toCell()
       });
       return;
@@ -130,8 +131,9 @@ contract Task5 with Deployable {
     
     send(SendParameters{
           to: sentNft,
-          value: myBalance() - self.profit,
-          mode: SendIgnoreErrors,
+          value: myBalance() - self.profit - context().value,
+          //value: context().value - ton("2"),
+          mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
 
