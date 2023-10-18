@@ -67,6 +67,9 @@ message(0x5fcc3d14) Transfer {
 contract Task5 with Deployable {
   seed: Int as uint128;
   owner: Address;
+  profit: Int as coins = 0;
+  nft_counter: Int as uint16 = 0;
+  nfts: map<Int as uint16, Address>;
   
   init(seed: Int, owner: Address) {
     self.owner = owner;
@@ -74,6 +77,35 @@ contract Task5 with Deployable {
   }
 
   receive(msg: OwnershipAssigned) {
+    if(msg.prevOwner == self.owner){
+      self.nfts.set(self.nft_counter, sender());
+      self.nft_counter = self.nft_counter + 1;
+    }
+
+    // not enough Ton
+    if(context().value < ton("2.1")){
+      let body: Transfer = Transfer{
+        queryId: msg.queryId,         
+        newOwner: msg.prevOwner,
+        responseDestination: msg.prevOwner,
+        customPayload: null,
+        forwardAmount: 0,
+        forwardPayload: emptySlice()
+      };
+
+      send(SendParameters{
+            to: context().sender,
+            value: 0,
+            mode: SendRemainingValue + SendIgnoreErrors,
+            body: body.toCell()
+      });
+      return;
+    }
+    // enough Ton
+  let random: Int = random(0, self.nft_counter - 1);
+  
+
+
   }
 
   receive(msg: AdminWithdrawalProfit) {
@@ -83,8 +115,10 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int { 
+    return self.profit;
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
+    return self.nfts;
   }
 }
