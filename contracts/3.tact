@@ -167,8 +167,7 @@ contract Task3 with Deployable {
       self.bAmount = self.bAmount + msg.amount;
       return;
     }
-
-    throw(1);
+    
   }
 
   get fun price(jetton: Address): Int { 

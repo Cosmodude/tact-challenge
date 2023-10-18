@@ -68,7 +68,7 @@ contract Task5 with Deployable {
   seed: Int as uint128;
   owner: Address;
   profit: Int as coins = 0;
-  nft_counter: Int as uint16 = 0;
+  nftCounter: Int as uint16 = 0;
   nfts: map<Int as uint16, Address>;
   
   init(seed: Int, owner: Address) {
@@ -78,8 +78,8 @@ contract Task5 with Deployable {
 
   receive(msg: OwnershipAssigned) {
     if(msg.prevOwner == self.owner){
-      self.nfts.set(self.nft_counter, sender());
-      self.nft_counter = self.nft_counter + 1;
+      self.nfts.set(self.nftCounter, sender());
+      self.nftCounter = self.nftCounter + 1;
     }
 
     // not enough Ton
@@ -101,14 +101,45 @@ contract Task5 with Deployable {
       });
       return;
     }
+
     // enough Ton
-  let random: Int = random(0, self.nft_counter - 1);
-  
 
+    self.profit = self.profit + ton("2");
+    let random: Int = random(0, self.nftCounter);
 
+    let body: Transfer = Transfer{
+      queryId: msg.queryId,         
+      newOwner: msg.prevOwner,
+      responseDestination: msg.prevOwner,
+      customPayload: null,
+      forwardAmount: 0,
+      forwardPayload: emptySlice()
+    };
+
+    if(random == self.nftCounter){
+      send(SendParameters{
+            to: sender(),
+            value: myBalance() - self.profit,
+            mode: SendIgnoreErrors,
+            body: body.toCell()
+      });
+      return;
+    }
+
+    let sentNft: Address = self.nfts.get(random)!!;
+    
+    send(SendParameters{
+          to: sentNft,
+          value: myBalance() - self.profit,
+          mode: SendIgnoreErrors,
+          body: body.toCell()
+    });
+
+    self.nfts.set(random, sender());
   }
 
   receive(msg: AdminWithdrawalProfit) {
+
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
