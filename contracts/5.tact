@@ -81,6 +81,7 @@ contract Task5 with Deployable {
       self.nfts.set(self.nftCounter, sender());
       self.nftCounter = self.nftCounter + 1;
       self.reply("Nft recieved".asComment());
+      return;
     }
 
     // not enough Ton
@@ -97,8 +98,7 @@ contract Task5 with Deployable {
       send(SendParameters{
             to: context().sender,
             value: 0,
-            bounce: true,
-            mode: SendRemainingValue + SendIgnoreErrors,
+            mode: SendRemainingValue,
             body: body.toCell()
       });
       return;
@@ -154,7 +154,6 @@ contract Task5 with Deployable {
           mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
-
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
