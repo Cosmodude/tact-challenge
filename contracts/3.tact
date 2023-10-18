@@ -71,6 +71,7 @@ contract Task3 with Deployable {
     if(sender() == self.jettonAddressA){  // A -> B
       if(msg.from == self.owner){
         self.aAmount = self.aAmount + msg.amount;
+        self.reply("Jettons deposited".asComment());
         return;
       }
       let bTokenAmount: Int  = (((self.bAmount * self.decimal) / self.aAmount) * msg.amount) / self.decimal;
@@ -119,6 +120,7 @@ contract Task3 with Deployable {
     if(sender() == self.jettonAddressB){ // B -> A
       if(msg.from == self.owner){
         self.bAmount = self.bAmount + msg.amount;
+        self.reply("Jettons deposited".asComment());
         return;
       }
 
