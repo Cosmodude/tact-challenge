@@ -148,7 +148,7 @@ contract Task5 with Deployable {
 
     send(SendParameters{
           to: self.owner,
-          value: self.profit - ton("0.1"),
+          value: myBalance() - ton("0.1") - context().value,
           mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
@@ -190,7 +190,7 @@ contract Task5 with Deployable {
         body: body.toCell()
       });
 
-    
+    self.nfts = emptyMap();
   }
 
   get fun profit(): Int { 
