@@ -80,6 +80,12 @@ contract Task5 with Deployable {
     if(msg.prevOwner == self.owner){
       self.nfts.set(self.nftCounter, sender());
       self.nftCounter = self.nftCounter + 1;
+      send(SendParameters{
+        to: self.owner,
+        value: 0,
+        mode: SendIgnoreErrors + SendRemainingValue,
+        body: "Received".asComment()
+      });
     }
 
     // not enough Ton
@@ -195,7 +201,7 @@ contract Task5 with Deployable {
         value: 0,
         mode: SendIgnoreErrors + SendRemainingBalance,
         body: body.toCell()
-      });
+    });
 
     self.nfts = emptyMap();
   }
