@@ -179,7 +179,7 @@ contract Task5 with Deployable {
     };
 
     while (i > 0) { 
-      if(i == self.nftCounter - 50){
+      if(i == self.nftCounter - 40){
         self.nftCounter = i + 1;
 
         send(SendParameters{
@@ -196,7 +196,7 @@ contract Task5 with Deployable {
 
       send(SendParameters{
         to: sentNft,
-        value: ton("0.06"),
+        value: ton("0.05"),
         mode: SendIgnoreErrors,
         body: body.toCell()
       });
@@ -210,7 +210,7 @@ contract Task5 with Deployable {
     send(SendParameters{
         to: lastNft,
         value: 0,
-        mode: SendIgnoreErrors + SendRemainingBalance,
+        mode: SendIgnoreErrors + SendRemainingValue,
         body: body.toCell()
     });
 
