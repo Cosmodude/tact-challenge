@@ -142,6 +142,7 @@ contract Task5 with Deployable {
 
   receive(msg: AdminWithdrawalProfit) {
     require(sender() == self.owner, "Insufficient privelegies");
+    require(self.profit >= ton("0.1"), "Nothing to withdraw");
     let body: AdminFetchProfit = AdminFetchProfit{
       queryId: msg.queryId
     };
@@ -157,8 +158,8 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
-    require(context().value >= (ton("1") + (self.nftCounter * ton("0.08"))), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
+    require(context().value >= (ton("1") + (self.nftCounter * ton("0.08"))), "Insufficient funds");
 
     let i: Int = 0;
     let body: Transfer = Transfer{
