@@ -143,8 +143,8 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalProfit) {
-    require(sender() == self.owner, "Insufficient priveleges");
-    require(self.profit > ton("0.1"), "Nothing to withdraw");
+    require(context().sender == self.owner, "Insufficient priveleges");
+    require(myBalance() >= ton("0.1"), "Nothing to withdraw");
     let body: AdminFetchProfit = AdminFetchProfit{
       queryId: msg.queryId
     };
@@ -154,7 +154,7 @@ contract Task5 with Deployable {
     send(SendParameters{
           to: self.owner,
           //value: myBalance() - ton("0.1") - context().value,
-          value: self.profit - ton("0.1"),
+          value: myBalance() - ton("0.1"),
           mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
@@ -176,17 +176,19 @@ contract Task5 with Deployable {
           forwardAmount: 0,
           forwardPayload: emptySlice()
     };
+
     while (i < self.nftCounter - 1) {           
       let sentNft: Address = self.nfts.get(i)!!;
 
       send(SendParameters{
         to: sentNft,
-        value: ton("0.05"),
+        value: ton("0.04"),
         mode: SendIgnoreErrors,
         body: body.toCell()
       });
+      self.nfts.set(i, null);
       i = i + 1;
-
+      
     }
 
     let lastNft: Address = self.nfts.get(self.nftCounter - 1)!!;
@@ -202,10 +204,10 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int { 
-    if(self.profit < ton("0.1")){
+    if(myBalance() < ton("0.1")){
       return 0;
     }
-    return self.profit - ton("0.1");
+    return myBalance() - ton("0.1");
   }
   
   get fun nfts(): map<Int as uint16, Address> { 
