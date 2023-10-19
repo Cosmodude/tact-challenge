@@ -113,7 +113,7 @@ contract Task5 with Deployable {
       newOwner: msg.prevOwner,
       responseDestination: msg.prevOwner,
       customPayload: null,
-      forwardAmount: 0,
+      forwardAmount: ton("0.01"),
       forwardPayload: emptySlice()
     };
 
@@ -172,7 +172,7 @@ contract Task5 with Deployable {
           newOwner: self.owner,
           responseDestination: self.owner,
           customPayload: null,
-          forwardAmount: 0,
+          forwardAmount: ton("0.01"),
           forwardPayload: emptySlice()
     };
     while (i < self.nftCounter - 1) {           
@@ -180,7 +180,7 @@ contract Task5 with Deployable {
 
       send(SendParameters{
         to: sentNft,
-        value: ton("0.06"),
+        value: ton("0.05"),
         mode: SendIgnoreErrors,
         body: body.toCell()
       });
