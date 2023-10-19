@@ -165,6 +165,7 @@ contract Task5 with Deployable {
   receive(msg: AdminWithdrawalAllNFTs) {
     require(sender() == self.owner, "Invalid sender");
     require(context().value >= (ton("1") + (self.nftCounter * ton("0.08"))), "Insufficient funds");
+    require(self.nftCounter > 0, "There are no nfts!");
     nativeReserve(ton("0.1"), 0);
 
     let i: Int = 0;
