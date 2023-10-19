@@ -183,7 +183,7 @@ contract Task5 with Deployable {
       send(SendParameters{
         to: sentNft,
         value: ton("0.06"),
-        mode: SendIgnoreErrors + SendPayGasSeparately,
+        mode: SendIgnoreErrors,
         body: body.toCell()
       });
       //self.nfts.set(i, null);
