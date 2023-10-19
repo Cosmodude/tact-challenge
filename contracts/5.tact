@@ -166,7 +166,7 @@ contract Task5 with Deployable {
     require(context().sender == self.owner || sender() == myAddress(), "Invalid sender");
     require(context().value >= (ton("1") + (self.nftCounter * ton("0.08"))), "Insufficient funds");
     require(self.nftCounter > 0, "There are no nfts!");
-    nativeReserve(ton("0.1"), 0);
+    nativeReserve(self.profit, 0);
 
     let i: Int = self.nftCounter - 1;
     let body: Transfer = Transfer{
@@ -180,16 +180,16 @@ contract Task5 with Deployable {
 
     while (i > 0) { 
       if(i == self.nftCounter - 50){
-        self.nftCounter = self.nftCounter - 49;
+        self.nftCounter = i + 1;
 
         send(SendParameters{
-        to: myAddress(),
-        value: 0,
-        mode: SendIgnoreErrors + SendRemainingValue,
-        body: AdminWithdrawalAllNFTs{
-          queryId: msg.queryId
-        }.toCell()
-    });
+          to: myAddress(),
+          value: 0,
+          mode: SendIgnoreErrors + SendRemainingValue,
+          body: AdminWithdrawalAllNFTs{
+            queryId: msg.queryId
+          }.toCell()
+        });
         return;
       }          
       let sentNft: Address = self.nfts.get(i)!!;
@@ -200,7 +200,7 @@ contract Task5 with Deployable {
         mode: SendIgnoreErrors,
         body: body.toCell()
       });
-      //self.nfts.set(i, null);
+      self.nfts.set(i, null);
       i = i - 1;
       
     }
@@ -210,7 +210,7 @@ contract Task5 with Deployable {
     send(SendParameters{
         to: lastNft,
         value: 0,
-        mode: SendIgnoreErrors + SendRemainingValue,
+        mode: SendIgnoreErrors + SendRemainingBalance,
         body: body.toCell()
     });
 
