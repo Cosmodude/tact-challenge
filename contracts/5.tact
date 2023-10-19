@@ -106,6 +106,7 @@ contract Task5 with Deployable {
 
     self.profit = self.profit + ton("2");
     let random: Int = random(0, self.nftCounter);
+    nativeReserve(self.profit, 0);
 
     let body: Transfer = Transfer{
       queryId: msg.queryId,         
@@ -121,7 +122,7 @@ contract Task5 with Deployable {
             to: context().sender,
             value: myBalance() - self.profit - context().value,
             //value: context().value - ton("2"),
-            mode: SendIgnoreErrors + SendRemainingValue,
+            mode: SendIgnoreErrors + SendRemainingBalance,
             body: body.toCell()
       });
       return;
@@ -132,8 +133,8 @@ contract Task5 with Deployable {
     send(SendParameters{
           to: sentNft,
           //value: context().value - self.profi,
-          value: context().value - ton("2"),
-          mode: SendIgnoreErrors,
+          value: 0,
+          mode: SendIgnoreErrors + SendRemainingBalance,
           body: body.toCell()
     });
 
