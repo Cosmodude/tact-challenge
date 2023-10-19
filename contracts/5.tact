@@ -198,7 +198,7 @@ contract Task5 with Deployable {
   }
 
   get fun profit(): Int { 
-    if(self.profit > ton("0.1")){
+    if(self.profit < ton("0.1")){
       return 0;
     }
     return self.profit - ton("0.1");
