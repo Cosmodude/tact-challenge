@@ -159,8 +159,8 @@ contract Task5 with Deployable {
     send(SendParameters{
           to: self.owner,
           //value: myBalance() - ton("0.1") - context().value,
-          value: 0,
-          mode: SendIgnoreErrors + SendRemainingBalance,
+          value: self.profit - ton("0.1"),
+          mode: SendIgnoreErrors + SendRemainingValue,
           body: body.toCell()
     });
 
