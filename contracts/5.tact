@@ -142,7 +142,7 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalProfit) {
-    require(sender() == self.owner, "Insufficient privelegies");
+    require(sender() == self.owner, "Insufficient priveleges");
     require(self.profit >= ton("0.1"), "Nothing to withdraw");
     let body: AdminFetchProfit = AdminFetchProfit{
       queryId: msg.queryId
