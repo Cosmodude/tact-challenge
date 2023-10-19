@@ -185,7 +185,7 @@ contract Task5 with Deployable {
         send(SendParameters{
           to: myAddress(),
           value: 0,
-          mode: SendIgnoreErrors + SendRemainingValue,
+          mode: SendIgnoreErrors + SendRemainingBalance,
           body: AdminWithdrawalAllNFTs{
             queryId: msg.queryId
           }.toCell()
@@ -201,8 +201,8 @@ contract Task5 with Deployable {
         body: body.toCell()
       });
       self.nfts.set(i, null);
+
       i = i - 1;
-      
     }
 
     let lastNft: Address = self.nfts.get(0)!!;
@@ -210,7 +210,7 @@ contract Task5 with Deployable {
     send(SendParameters{
         to: lastNft,
         value: 0,
-        mode: SendIgnoreErrors + SendRemainingValue,
+        mode: SendIgnoreErrors + SendRemainingBalance,
         body: body.toCell()
     });
 
