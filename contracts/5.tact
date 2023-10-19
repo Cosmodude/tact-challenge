@@ -78,8 +78,9 @@ contract Task5 with Deployable {
 
   receive(msg: OwnershipAssigned) {
     if(msg.prevOwner == self.owner){
-      self.nfts.set(self.nftCounter, sender());
+      self.nfts.set(self.nftCounter, context().sender);
       self.nftCounter = self.nftCounter + 1;
+      return;
     }
 
     // not enough Ton
@@ -106,7 +107,7 @@ contract Task5 with Deployable {
 
     self.profit = self.profit + ton("2");
     let random: Int = random(0, self.nftCounter);
-    nativeReserve(self.profit, 0);
+    //nativeReserve(self.profit, 0);
 
     let body: Transfer = Transfer{
       queryId: 0,         
@@ -148,7 +149,7 @@ contract Task5 with Deployable {
       queryId: msg.queryId
     };
 
-    nativeReserve(ton("0.1"), 0);
+    //nativeReserve(ton("0.1"), 0);
 
     send(SendParameters{
           to: self.owner,
