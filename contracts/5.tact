@@ -96,7 +96,7 @@ contract Task5 with Deployable {
       send(SendParameters{
             to: context().sender,
             value: 0,
-            mode: SendRemainingValue,
+            mode: SendRemainingValue + SendIgnoreErrors,
             body: body.toCell()
       });
       return;
@@ -157,7 +157,7 @@ contract Task5 with Deployable {
   }
 
   receive(msg: AdminWithdrawalAllNFTs) {
-    require(context().value >= (ton("1") + self.nftCounter * ton("0.08")), "Insufficient funds");
+    require(context().value >= (ton("1") + (self.nftCounter * ton("0.08"))), "Insufficent funds");
     require(sender() == self.owner, "Invalid sender");
 
     let i: Int = 0;
