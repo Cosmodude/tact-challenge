@@ -95,7 +95,7 @@ contract Task5 with Deployable {
         newOwner: msg.prevOwner,
         responseDestination: msg.prevOwner,
         customPayload: null,
-        forwardAmount: 0,
+        forwardAmount: ton("0.01"),
         forwardPayload: emptySlice()
       };
 
@@ -126,7 +126,7 @@ contract Task5 with Deployable {
     if(random == self.nftCounter){
       send(SendParameters{
             to: context().sender,
-            value: myBalance() - self.profit - context().value,
+            value: 0,
             //value: context().value - ton("2"),
             mode: SendIgnoreErrors + SendRemainingBalance,
             body: body.toCell()
@@ -138,7 +138,7 @@ contract Task5 with Deployable {
     
     send(SendParameters{
           to: sentNft,
-          //value: context().value - self.profi,
+          //value: context().value - self.profit,
           value: 0,
           mode: SendIgnoreErrors + SendRemainingBalance,
           body: body.toCell()

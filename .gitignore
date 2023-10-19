@@ -1,8 +1,9 @@
 node_modules
 temp
 build
-./contracts/1.tact
-./contracts/2.tact
-./contracts/3.tact
-./contracts/4.tact
 
+contracts/1.tact
+contracts/2.tact
+contracts/3.tact
+contracts/4.tact
+contracts/imports
