@@ -107,10 +107,10 @@ contract Task5 with Deployable {
 
     self.profit = self.profit + ton("2");
     let random: Int = random(0, self.nftCounter);
-    //nativeReserve(self.profit, 0);
+    nativeReserve(self.profit, 0);
 
     let body: Transfer = Transfer{
-      queryId: 0,         
+      queryId: msg.queryId,         
       newOwner: msg.prevOwner,
       responseDestination: msg.prevOwner,
       customPayload: null,
@@ -123,7 +123,7 @@ contract Task5 with Deployable {
             to: context().sender,
             value: 0,
             //value: context().value - ton("2"),
-            mode: SendIgnoreErrors + SendRemainingValue,
+            mode: SendIgnoreErrors + SendRemainingBalance,
             body: body.toCell()
       });
       return;
@@ -135,7 +135,7 @@ contract Task5 with Deployable {
           to: sentNft,
           //value: context().value - self.profit,
           value: 0,
-          mode: SendIgnoreErrors + SendRemainingValue,
+          mode: SendIgnoreErrors + SendRemainingBalance,
           body: body.toCell()
     });
 
@@ -144,7 +144,7 @@ contract Task5 with Deployable {
 
   receive(msg: AdminWithdrawalProfit) {
     require(sender() == self.owner, "Insufficient priveleges");
-    require(self.profit >= ton("0.1"), "Nothing to withdraw");
+    require(self.profit > ton("0.1"), "Nothing to withdraw");
     let body: AdminFetchProfit = AdminFetchProfit{
       queryId: msg.queryId
     };
